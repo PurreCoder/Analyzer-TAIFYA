@@ -21,8 +21,8 @@ namespace Analyzer
             {
                 StringParser sp = new StringParser(inputTextBox.Text);
                 sp.ParseString();
-                variableListView.Items.AddRange(Checker.variables.Select(x => new ListViewItem(x.ToString())).ToArray());
-                constantListView.Items.AddRange(Checker.constants.Select(x => new ListViewItem(x.ToString())).ToArray());
+                variableListView.Items.AddRange(sp.variables.Select(x => new ListViewItem(x.ToString())).ToArray());
+                constantListView.Items.AddRange(sp.constants.Select(x => new ListViewItem(x.ToString())).ToArray());
                 resultTextBox.Text = "Строка принадлежит языку";
             }
             catch (KeyNotFoundException ex)

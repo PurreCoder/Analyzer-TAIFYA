@@ -16,6 +16,20 @@ namespace Analyzer
         // 2 - int
         // 3 - double
 
+        // variable, its description
+        public SortedDictionary<String, String> variables;
+        public SortedDictionary<String, String> constants;
+
+        public static bool IsDigit(char c)
+        {
+            return ('0' <= c && c <= '9');
+        }
+
+        public static bool IsLetter(char c)
+        {
+            return ('a' <= c && c <= 'z');
+        }
+
         public StringParser(String source)
         {
             this.source = source.ToLower();
@@ -24,8 +38,8 @@ namespace Analyzer
                 throw new KeyNotFoundException("Строка не может быть пустой");
             }
 
-            Checker.variables = new SortedDictionary<string, string>();
-            Checker.constants = new SortedDictionary<string, string>();
+            variables = new SortedDictionary<string, string>();
+            constants = new SortedDictionary<string, string>();
             pos = 0;
         }
         public void ParseString()
@@ -77,7 +91,7 @@ namespace Analyzer
                             }
                             choice_type = 1;
                             ++pos;
-                            if (pos < source.Length && (Checker.IsDigit(source[pos]) || Checker.IsLetter(source[pos])))
+                            if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
                             {
                                 ++pos;
                             }
@@ -93,7 +107,7 @@ namespace Analyzer
                             {
                                 throw new FormatException("Синтаксическая ошибка: ожидалась кавычка");
                             }
-                            Checker.constants.Add("\'" + source[pos - 2] + "\'", "константа выбора");
+                            constants.Add("\'" + source[pos - 2] + "\'", "константа выбора");
                         }
                         else
                         {
@@ -208,7 +222,7 @@ namespace Analyzer
                                 }
                                 choice_type = 1;
                                 ++pos;
-                                if (pos < source.Length && (Checker.IsDigit(source[pos]) || Checker.IsLetter(source[pos])))
+                                if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
                                 {
                                     ++pos;
                                 }
@@ -246,7 +260,7 @@ namespace Analyzer
                         if (source[pos] == '\'')
                         {
                             ++pos;
-                            if (pos < source.Length && (Checker.IsDigit(source[pos]) || Checker.IsLetter(source[pos])))
+                            if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
                             {
                                 ++pos;
                             }
@@ -291,7 +305,7 @@ namespace Analyzer
         public String nextIdentifier(String base_type)
         {
             String id_name = "";
-            if (pos < source.Length && (Checker.IsLetter(source[pos]) || source[pos] == '_'))
+            if (pos < source.Length && (IsLetter(source[pos]) || source[pos] == '_'))
             {
                 id_name += source[pos++];
             }
@@ -299,7 +313,7 @@ namespace Analyzer
             {
                 throw new FormatException("Синтаксическая ошибка: ожидался идентификатор");
             }
-            while (pos < source.Length && (Checker.IsLetter(source[pos]) || Checker.IsDigit(source[pos]) || source[pos] == '_'))
+            while (pos < source.Length && (IsLetter(source[pos]) || IsDigit(source[pos]) || source[pos] == '_'))
             {
                 id_name += source[pos++];
             }
@@ -316,9 +330,9 @@ namespace Analyzer
                 throw new FormatException("Синтаксическая ошибка: имя идентификатора совпадает с зарезервированным словом " + id_name);
             }
 
-            if (!Checker.variables.ContainsKey(id_name))
+            if (!variables.ContainsKey(id_name))
             {
-                Checker.variables.Add(id_name, base_type);
+                variables.Add(id_name, base_type);
             }
             return id_name;
         }
@@ -334,11 +348,11 @@ namespace Analyzer
             {
                 res += source[pos++];
             }
-            if (Checker.IsDigit(source[pos]))
+            if (IsDigit(source[pos]))
             {
                 if (source[pos] == '0')
                 {
-                    if (pos + 1 < source.Length || Checker.IsDigit(source[pos + 1]))
+                    if (pos + 1 < source.Length || IsDigit(source[pos + 1]))
                     {
                         throw new FormatException("Синтаксическая ошибка: ведущие нули в константе");
                     }
@@ -347,7 +361,7 @@ namespace Analyzer
                 }
                 else
                 {
-                    while (pos < source.Length && Checker.IsDigit(source[pos]))
+                    while (pos < source.Length && IsDigit(source[pos]))
                     {
                         res += source[pos++];
                     }
@@ -366,8 +380,8 @@ namespace Analyzer
                     throw new FormatException("Значение константы не является допустимым");
                 }
             }
-            if (!Checker.constants.ContainsKey(res))
-                Checker.constants.Add(res, (base_type == "константа" ? "целая константа" : base_type));
+            if (!constants.ContainsKey(res))
+                constants.Add(res, (base_type == "константа" ? "целая константа" : base_type));
         }
 
         public bool nextConstant(string base_type) // if constant is integer
@@ -381,12 +395,12 @@ namespace Analyzer
             {
                 res += source[pos++];
             }
-            if (Checker.IsDigit(source[pos]))
+            if (IsDigit(source[pos]))
             {
                 if (source[pos] == '0')
                 {
                     ++pos;
-                    if (pos < source.Length && Checker.IsDigit(source[pos]) && source[pos] != '.')
+                    if (pos < source.Length && IsDigit(source[pos]) && source[pos] != '.')
                     {
                         throw new FormatException("Синтаксическая ошибка: ведущие нули в константе");
                     }
@@ -394,7 +408,7 @@ namespace Analyzer
                 }
                 else
                 {
-                    while (pos < source.Length && Checker.IsDigit(source[pos]))
+                    while (pos < source.Length && IsDigit(source[pos]))
                     {
                         res += source[pos++];
                     }
@@ -403,7 +417,7 @@ namespace Analyzer
                 {
                     res += '.';
                     ++pos;
-                    while (pos < source.Length && Checker.IsDigit(source[pos]))
+                    while (pos < source.Length && IsDigit(source[pos]))
                     {
                         res += source[pos++];
                     }
@@ -412,7 +426,7 @@ namespace Analyzer
                         res += 'e';
                         ++pos;
                         SkipWS();
-                        if (pos >= source.Length || !Checker.IsDigit(source[pos]) && source[pos] != '+' && source[pos] != '-')
+                        if (pos >= source.Length || !IsDigit(source[pos]) && source[pos] != '+' && source[pos] != '-')
                         {
                             throw new FormatException("Синтаксическая ошибка: ожидалась экспонента");
                         }
@@ -421,17 +435,17 @@ namespace Analyzer
                             res += source[pos++];
                         }
                         SkipWS();
-                        while (pos < source.Length && Checker.IsDigit(source[pos]))
+                        while (pos < source.Length && IsDigit(source[pos]))
                         {
                             res += source[pos++];
                         }
-                        if (!Checker.constants.ContainsKey(res))
-                            Checker.constants.Add(res, (base_type == "константа" ? "вещ. константа с плав. точкой" : base_type));
+                        if (!constants.ContainsKey(res))
+                            constants.Add(res, (base_type == "константа" ? "вещ. константа с плав. точкой" : base_type));
                     }
                     else
                     {
-                        if (!Checker.constants.ContainsKey(res))
-                            Checker.constants.Add(res, (base_type == "константа" ? "вещ. константа с фикс. точкой" : base_type));
+                        if (!constants.ContainsKey(res))
+                            constants.Add(res, (base_type == "константа" ? "вещ. константа с фикс. точкой" : base_type));
                     }
                     return false;
                 }
@@ -445,8 +459,8 @@ namespace Analyzer
                             throw new FormatException("Значение константы не является допустимым");
                         }
                     }
-                    if (!Checker.constants.ContainsKey(res))
-                        Checker.constants.Add(res, (base_type == "константа" ? "целая константа" : base_type));
+                    if (!constants.ContainsKey(res))
+                        constants.Add(res, (base_type == "константа" ? "целая константа" : base_type));
                     return true;
                 }
             }
@@ -462,7 +476,7 @@ namespace Analyzer
             {
                 throw new FormatException("Синтаксическая ошибка: ожидался операнд");
             }
-            if (Checker.IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
+            if (IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
             {
                 nextConstant("константа");
             }
@@ -472,30 +486,30 @@ namespace Analyzer
                 SkipWS();
                 if (pos < source.Length && source[pos] == '[')
                 {
-                    if (Checker.variables[id_name] != "массив" && Checker.variables[id_name] != "идентификатор")
+                    if (variables[id_name] != "массив" && variables[id_name] != "идентификатор")
                     {
                         throw new FormatException("Семантическая ошибка: обращение к переменной как к массиву");
                     }    
-                    Checker.variables[id_name] = "массив";
+                    variables[id_name] = "массив";
                     ++pos;
                     SkipWS();
                     if (pos >= source.Length)
                     {
                         throw new FormatException("Синтаксическая ошибка: ожидался идентификатор или целая константа");
                     }
-                    if (Checker.IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
+                    if (IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
                     {
                         nextIntegralConstant("индекс");
                     }
                     else
                     {
                         String index_id = nextIdentifier("индекс");
-                        if (Checker.variables[index_id] != "индекс" && Checker.variables[index_id] != "переменная")
+                        if (variables[index_id] != "индекс" && variables[index_id] != "переменная")
                         {
                             pos -= index_id.Length;
                             throw new FormatException("Семантическая ошибка: некорректное повторное использование идентификатора");
                         }
-                        Checker.variables[index_id] = "индекс";
+                        variables[index_id] = "индекс";
                     }
                     if (pos >= source.Length || source[pos++] != ']')
                     {
@@ -504,11 +518,11 @@ namespace Analyzer
                 }
                 else
                 {
-                    if (Checker.variables[id_name] != "переменная" && Checker.variables[id_name] != "идентификатор" && Checker.variables[id_name] != "индекс")
+                    if (variables[id_name] != "переменная" && variables[id_name] != "идентификатор" && variables[id_name] != "индекс")
                     {
                         throw new FormatException("Семантическая ошибка: некорректное повторное использование идентификатора");
                     }
-                    Checker.variables[id_name] = "переменная";
+                    variables[id_name] = "переменная";
                 }
             }
         }
@@ -523,29 +537,29 @@ namespace Analyzer
             }
             if (source[pos] == '[')
             {
-                if (Checker.variables[id_name] != "массив" && Checker.variables[id_name] != "идентификатор")
+                if (variables[id_name] != "массив" && variables[id_name] != "идентификатор")
                 {
                     throw new FormatException("Семантическая ошибка: обращение к переменной как к массиву");
                 }
-                Checker.variables[id_name] = "массив";
+                variables[id_name] = "массив";
                 pos += 1;
                 SkipWS();
                 if (pos >= source.Length)
                 {
                     throw new FormatException("Синтаксическая ошибка: ожидался идентификатор или целая константа");
                 }
-                if (Checker.IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
+                if (IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
                 {
                     nextIntegralConstant("индекс");
                 }
                 else
                 {
                     String index_id = nextIdentifier("индекс");
-                    if (Checker.variables[index_id] != "индекс" && Checker.variables[index_id] != "переменная")
+                    if (variables[index_id] != "индекс" && variables[index_id] != "переменная")
                     {
                         throw new FormatException("Семантическая ошибка: некорректное повторное использование идентификатора");
                     }    
-                    Checker.variables[index_id] = "индекс";
+                    variables[index_id] = "индекс";
                 }
                 if (pos >= source.Length || source[pos++] != ']')
                 {
@@ -554,11 +568,11 @@ namespace Analyzer
             }
             else
             {
-                if (Checker.variables[id_name] != "переменная" && Checker.variables[id_name] != "идентификатор" && Checker.variables[id_name] != "индекс")
+                if (variables[id_name] != "переменная" && variables[id_name] != "идентификатор" && variables[id_name] != "индекс")
                 {
                     throw new FormatException("Семантическая ошибка: некорректное повторное использование идентификатора");
                 }
-                Checker.variables[id_name] = "переменная";
+                variables[id_name] = "переменная";
             }
             SkipWS();
             if (pos + 1 < source.Length && source[pos] == ':' && source[pos + 1] == '=')
