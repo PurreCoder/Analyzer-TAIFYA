@@ -4,10 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-/*
-case  a_b  of  'a', 'b' : A :=ab[56]+C; 'c','d'  : ab[i] := 0.3; else hhh := 5.4E-9;  end;
-*/
-
 namespace Analyzer
 {
     class StringParser
