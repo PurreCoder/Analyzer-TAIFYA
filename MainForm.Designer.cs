@@ -53,7 +53,7 @@
             this.inputTextBox.Location = new System.Drawing.Point(9, 72);
             this.inputTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.inputTextBox.Name = "inputTextBox";
-            this.inputTextBox.Size = new System.Drawing.Size(999, 30);
+            this.inputTextBox.Size = new System.Drawing.Size(1061, 30);
             this.inputTextBox.TabIndex = 0;
             // 
             // analyzeButton
@@ -63,7 +63,7 @@
             this.analyzeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.analyzeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.analyzeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.analyzeButton.Location = new System.Drawing.Point(9, 226);
+            this.analyzeButton.Location = new System.Drawing.Point(6, 226);
             this.analyzeButton.Margin = new System.Windows.Forms.Padding(2);
             this.analyzeButton.Name = "analyzeButton";
             this.analyzeButton.Size = new System.Drawing.Size(121, 37);
@@ -81,7 +81,7 @@
             this.title.Location = new System.Drawing.Point(0, 0);
             this.title.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(1017, 37);
+            this.title.Size = new System.Drawing.Size(1079, 37);
             this.title.TabIndex = 3;
             this.title.Text = "Анализатор оператора Case Of языка Turbo Pascal";
             this.title.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -108,7 +108,7 @@
             this.resultTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.resultTextBox.Name = "resultTextBox";
             this.resultTextBox.ReadOnly = true;
-            this.resultTextBox.Size = new System.Drawing.Size(999, 30);
+            this.resultTextBox.Size = new System.Drawing.Size(1061, 30);
             this.resultTextBox.TabIndex = 5;
             // 
             // infoButton
@@ -118,7 +118,7 @@
             this.infoButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.infoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.infoButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.infoButton.Location = new System.Drawing.Point(12, 343);
+            this.infoButton.Location = new System.Drawing.Point(6, 343);
             this.infoButton.Margin = new System.Windows.Forms.Padding(2);
             this.infoButton.Name = "infoButton";
             this.infoButton.Size = new System.Drawing.Size(120, 37);
@@ -145,7 +145,7 @@
             this.clearButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.clearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.clearButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.clearButton.Location = new System.Drawing.Point(11, 285);
+            this.clearButton.Location = new System.Drawing.Point(6, 285);
             this.clearButton.Margin = new System.Windows.Forms.Padding(2);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(121, 37);
@@ -162,10 +162,10 @@
             this.variableListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.variableListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F);
             this.variableListView.HideSelection = false;
-            this.variableListView.Location = new System.Drawing.Point(144, 226);
+            this.variableListView.Location = new System.Drawing.Point(141, 223);
             this.variableListView.Margin = new System.Windows.Forms.Padding(2);
             this.variableListView.Name = "variableListView";
-            this.variableListView.Size = new System.Drawing.Size(368, 327);
+            this.variableListView.Size = new System.Drawing.Size(368, 361);
             this.variableListView.TabIndex = 9;
             this.variableListView.UseCompatibleStateImageBehavior = false;
             this.variableListView.View = System.Windows.Forms.View.List;
@@ -178,10 +178,10 @@
             this.constantListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.constantListView.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F);
             this.constantListView.HideSelection = false;
-            this.constantListView.Location = new System.Drawing.Point(516, 226);
+            this.constantListView.Location = new System.Drawing.Point(513, 223);
             this.constantListView.Margin = new System.Windows.Forms.Padding(2);
             this.constantListView.Name = "constantListView";
-            this.constantListView.Size = new System.Drawing.Size(492, 327);
+            this.constantListView.Size = new System.Drawing.Size(557, 364);
             this.constantListView.TabIndex = 10;
             this.constantListView.UseCompatibleStateImageBehavior = false;
             this.constantListView.View = System.Windows.Forms.View.List;
@@ -202,7 +202,7 @@
             this.constantTitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.constantTitle.AutoSize = true;
             this.constantTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.constantTitle.Location = new System.Drawing.Point(694, 197);
+            this.constantTitle.Location = new System.Drawing.Point(756, 197);
             this.constantTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.constantTitle.Name = "constantTitle";
             this.constantTitle.Size = new System.Drawing.Size(162, 24);
@@ -214,7 +214,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Gray;
-            this.ClientSize = new System.Drawing.Size(1017, 563);
+            this.ClientSize = new System.Drawing.Size(1079, 597);
             this.Controls.Add(this.constantTitle);
             this.Controls.Add(this.variableTitle);
             this.Controls.Add(this.constantListView);

@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+case  a_b  of  'a', 'b' : A :=ab[56]+C; 'c','d'  : ab[i] := 0.3; else hhh := 5.4E-9;  end;
+*/
+
 namespace Analyzer
 {
     class StringParser
@@ -18,7 +22,7 @@ namespace Analyzer
 
         // variable, its description
         public SortedDictionary<String, String> variables;
-        public SortedDictionary<String, String> constants;
+        public SortedDictionary<String, (String, String)> constants;
 
         public static bool IsDigit(char c)
         {
@@ -39,7 +43,7 @@ namespace Analyzer
             }
 
             variables = new SortedDictionary<string, string>();
-            constants = new SortedDictionary<string, string>();
+            constants = new SortedDictionary<string, (string, string)>();
             pos = 0;
         }
         public void ParseString()
@@ -91,13 +95,18 @@ namespace Analyzer
                             }
                             choice_type = 1;
                             ++pos;
+                            String text_name = "";
                             if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
                             {
-                                ++pos;
+                                text_name += source[pos++];
                             }
                             else
                             {
                                 throw new FormatException("Синтаксическая ошибка: ожидался символ");
+                            }
+                            while (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
+                            {
+                                text_name += source[pos++];
                             }
                             if (pos < source.Length && source[pos] == '\'')
                             {
@@ -107,15 +116,15 @@ namespace Analyzer
                             {
                                 throw new FormatException("Синтаксическая ошибка: ожидалась кавычка");
                             }
-                            constants.Add("\'" + source[pos - 2] + "\'", "константа выбора");
+                            constants.Add("\'" + text_name + "\'", ("конст. выбора", "строковая"));
                         }
                         else
                         {
-                            bool its_type = nextConstant("константа выбора");
-                            if (!its_type && choice_type == 1)
+                            if (choice_type == 1)
                             {
                                 throw new FormatException("Семантическая ошибка: несоответствие типов констант выбора");
                             }
+                            bool its_type = nextConstant("конст. выбора");
                             choice_type = Math.Max(choice_type, (its_type ? 2 : 3));
                         }
                         state = State.A2;
@@ -222,13 +231,18 @@ namespace Analyzer
                                 }
                                 choice_type = 1;
                                 ++pos;
+                                String text_name = "";
                                 if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
                                 {
-                                    ++pos;
+                                    text_name += source[pos++];
                                 }
                                 else
                                 {
                                     throw new FormatException("Синтаксическая ошибка: ожидался символ");
+                                }
+                                while (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
+                                {
+                                    text_name += source[pos++];
                                 }
                                 if (pos < source.Length && source[pos] == '\'')
                                 {
@@ -238,14 +252,15 @@ namespace Analyzer
                                 {
                                     throw new FormatException("Синтаксическая ошибка: ожидалась кавычка");
                                 }
+                                constants.Add("\'" + text_name + "\'", ("конст. выбора", "строковая"));
                             }
                             else
                             {
-                                bool its_type = nextConstant("константа выбора");
-                                if (!its_type && choice_type == 1)
+                                if (choice_type == 1)
                                 {
                                     throw new FormatException("Семантическая ошибка: несоответствие типов констант выбора");
                                 }
+                                bool its_type = nextConstant("конст. выбора");
                                 choice_type = Math.Max(choice_type, (its_type ? 2 : 3));
                             }
                             state = State.B3;
@@ -257,44 +272,55 @@ namespace Analyzer
                         {
                             throw new FormatException("Синтаксическая ошибка: ожидась точка с запятой, двоеточие или список констант");
                         }
-                        if (source[pos] == '\'')
+                        if (source[pos] == ':')
                         {
                             ++pos;
-                            if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
-                            {
-                                ++pos;
-                            }
-                            else
-                            {
-                                throw new FormatException("Синтаксическая ошибка: ожидался символ");
-                            }
-                            if (pos < source.Length && source[pos] == '\'')
-                            {
-                                ++pos;
-                            }
-                            else
-                            {
-                                throw new FormatException("Синтаксическая ошибка: ожидалась кавычка");
-                            }
-                            state = State.B3;
+                            state = State.B1;
                         }
                         else
                         {
-                            if (source[pos] == ':')
+                            if (source[pos] != ',')
+                            {
+                                throw new FormatException("Синтаксическая ошибка: ожидилась запятая или двоеточие");
+                            }
+                            ++pos;
+                            SkipWS();
+                            if (source[pos] == '\'')
                             {
                                 ++pos;
-                                state = State.B1;
+                                String text_name = "";
+                                if (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
+                                {
+                                    text_name += source[pos++];
+                                }
+                                else
+                                {
+                                    throw new FormatException("Синтаксическая ошибка: ожидался символ");
+                                }
+                                while (pos < source.Length && (IsDigit(source[pos]) || IsLetter(source[pos])))
+                                {
+                                    text_name += source[pos++];
+                                }
+                                if (pos < source.Length && source[pos] == '\'')
+                                {
+                                    ++pos;
+                                }
+                                else
+                                {
+                                    throw new FormatException("Синтаксическая ошибка: ожидалась кавычка");
+                                }
+                                constants.Add("\'" + text_name + "\'", ("конст. выбора", "строковая"));
                             }
                             else
                             {
-                                bool its_type = nextConstant("константа выбора");
-                                if (!its_type && choice_type == 1)
+                                if (choice_type == 1)
                                 {
                                     throw new FormatException("Семантическая ошибка: несоответствие типов констант выбора");
                                 }
+                                bool its_type = nextConstant("конст. выбора");
                                 choice_type = Math.Max(choice_type, (its_type ? 2 : 3));
-                                state = State.B3;
                             }
+                            state = State.B3;
                         }
                         break;
                     default:
@@ -381,7 +407,7 @@ namespace Analyzer
                 }
             }
             if (!constants.ContainsKey(res))
-                constants.Add(res, (base_type == "константа" ? "целая константа" : base_type));
+                constants.Add(res, (base_type, "целая"));
         }
 
         public bool nextConstant(string base_type) // if constant is integer
@@ -440,12 +466,12 @@ namespace Analyzer
                             res += source[pos++];
                         }
                         if (!constants.ContainsKey(res))
-                            constants.Add(res, (base_type == "константа" ? "вещ. константа с плав. точкой" : base_type));
+                            constants.Add(res, (base_type, "вещ. с плав. точкой"));
                     }
                     else
                     {
                         if (!constants.ContainsKey(res))
-                            constants.Add(res, (base_type == "константа" ? "вещ. константа с фикс. точкой" : base_type));
+                            constants.Add(res, (base_type, "вещ. с фикс. точкой"));
                     }
                     return false;
                 }
@@ -460,7 +486,7 @@ namespace Analyzer
                         }
                     }
                     if (!constants.ContainsKey(res))
-                        constants.Add(res, (base_type == "константа" ? "целая константа" : base_type));
+                        constants.Add(res, (base_type, "целая"));
                     return true;
                 }
             }
@@ -478,7 +504,7 @@ namespace Analyzer
             }
             if (IsDigit(source[pos]) || source[pos] == '+' || source[pos] == '-')
             {
-                nextConstant("константа");
+                nextConstant("конст. выражения");
             }
             else
             {
