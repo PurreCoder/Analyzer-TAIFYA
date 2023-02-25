@@ -78,6 +78,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Немченко ДИ Вариант 8 ТАИФЯ.docx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

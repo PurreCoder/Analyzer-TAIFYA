@@ -533,6 +533,7 @@ namespace Analyzer
                         }
                         variables[index_id] = "индекс";
                     }
+                    SkipWS();
                     if (pos >= source.Length || source[pos++] != ']')
                     {
                         throw new FormatException("Синтаксическая ошибка: ожидалась закрывающая квадратная скобка");
@@ -583,6 +584,7 @@ namespace Analyzer
                     }    
                     variables[index_id] = "индекс";
                 }
+                SkipWS();
                 if (pos >= source.Length || source[pos++] != ']')
                 {
                     throw new FormatException("Синтаксическая ошибка: ожидалась закрывающая квадратная скобка");
